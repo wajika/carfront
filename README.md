@@ -2,6 +2,12 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 This is the frontend React application for the car database Spring Boot backend application.
 
+`npm install react-table --save`
+`npm install react-confirm-alert --save`
+`npm install react-skylight --save`
+`npm install react-csv --save`
+`npm install @material-ui/core --save`
+
 ## Available Scripts
 
 In the project directory, you can run:
