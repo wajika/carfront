@@ -1,3 +1,4 @@
+import apm from '../rum';
 import React from 'react';
 import SkyLight from 'react-skylight';
 import Button from '@material-ui/core/Button';
@@ -14,6 +15,11 @@ class AddCar extends React.Component {
 
     // Save car and close modal form
     handleSubmit = (event) => {
+        var transaction = apm.startTransaction("Add Car", "Car");
+        var httpSpan = transaction.startSpan('Add Car', 'Car')
+
+        apm.addTags(this.state);
+
         event.preventDefault();
         var newCar = {
             brand: this.state.brand, model: this.state.model,
@@ -22,6 +28,9 @@ class AddCar extends React.Component {
         };
         this.props.addCar(newCar);
         this.refs.addDialog.hide();
+
+        httpSpan.end()
+        transaction.end();
     }
     // Cancel and close modal form
     cancelSubmit = (event) => {
@@ -58,7 +67,7 @@ class AddCar extends React.Component {
                     </form>
                 </SkyLight>
                 <div>
-                    <Button variant="raised" color="primary"
+                    <Button variant="contained" color="primary"
                         style={{ 'margin': '10px' }}
                         onClick={() => this.refs.addDialog.show()}>New Car</Button>
                 </div>

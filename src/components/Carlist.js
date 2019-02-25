@@ -9,6 +9,7 @@ import { CSVLink } from 'react-csv';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
+import apm from '../rum'
 
 class Carlist extends Component {
     constructor(props) {
@@ -29,6 +30,7 @@ class Carlist extends Component {
             .then(res => this.fetchCars())
             .catch(err => console.error(err))
     }
+    
     renderEditable = (cellInfo) => {
         return (
             <div
@@ -80,6 +82,7 @@ class Carlist extends Component {
     componentDidMount() {
         this.fetchCars();
     }
+
     fetchCars = () => {
         fetch(SERVER_URL + 'api/cars')
             .then((response) => response.json())
@@ -91,7 +94,11 @@ class Carlist extends Component {
             .catch(err => console.error(err));
     }
 
-
+    generateError() {
+        const err = new Error("This is an error generated on purpose for testing!");
+        apm.captureError(err);
+        throw err;
+    }
 
     confirmDelete = (link) => {
         confirmAlert({
@@ -134,7 +141,7 @@ class Carlist extends Component {
             filterable: false,
             width: 100,
             accessor: '_links.self.href',
-            Cell: ({ value, row }) => (<Button size="small" variant="flat"
+            Cell: ({ value, row }) => (<Button size="small" variant="text"
                 color="primary"
                 onClick={() => { this.updateCar(row, value) }}>Save</Button>)
         }, {
@@ -143,7 +150,7 @@ class Carlist extends Component {
             filterable: false,
             width: 100,
             accessor: '_links.self.href',
-            Cell: ({ value }) => (<Button size="small" variant="flat" color="secondary"
+            Cell: ({ value }) => (<Button size="small" variant="text" color="secondary"
                 onClick={() => { this.confirmDelete(value) }}>Delete</Button>)
         }]
 
@@ -154,8 +161,10 @@ class Carlist extends Component {
                     <Grid item>
                         <AddCar addCar={this.addCar} fetchCars={this.fetchCars} />
                     </Grid>
-                    <Grid item style={{ padding: 20 }}>
-                        <CSVLink data={this.state.cars} separator=";">Export CSV</CSVLink>
+                    <Grid>
+                        <Button variant="contained" color="secondary"
+                            style={{ 'margin': '10px' }}
+                            onClick={() => { this.generateError() }}>Error</Button>
                     </Grid>
                 </Grid>
                 <ReactTable data={this.state.cars} columns={columns}
