@@ -1,3 +1,4 @@
+import apm from '../rum'
 import React, { Component } from 'react';
 import { SERVER_URL } from '../constants.js'
 import ReactTable from "react-table";
@@ -9,7 +10,6 @@ import { CSVLink } from 'react-csv';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Snackbar from '@material-ui/core/Snackbar';
-import apm from '../rum'
 
 class Carlist extends Component {
     constructor(props) {
@@ -19,6 +19,11 @@ class Carlist extends Component {
 
     // Add new car
     addCar(car) {
+        var transaction = apm.startTransaction("Add Car", "Car");
+        var httpSpan = transaction.startSpan('Add Car', 'Car')
+
+        apm.addTags(car);
+
         fetch(SERVER_URL + 'api/cars',
             {
                 method: 'POST',
@@ -29,6 +34,9 @@ class Carlist extends Component {
             })
             .then(res => this.fetchCars())
             .catch(err => console.error(err))
+            
+        httpSpan.end()
+        transaction.end();    
     }
     
     renderEditable = (cellInfo) => {
@@ -61,6 +69,7 @@ class Carlist extends Component {
                 console.error(err)
             })
     }
+
     // Update car
     updateCar(car, link) {
         fetch(link,
@@ -96,7 +105,6 @@ class Carlist extends Component {
 
     generateError() {
         const err = new Error("This is an error generated on purpose for testing!");
-        apm.captureError(err);
         throw err;
     }
 
@@ -132,7 +140,7 @@ class Carlist extends Component {
             accessor: 'year',
             Cell: this.renderEditable
         }, {
-            Header: 'Price €',
+            Header: 'Price $',
             accessor: 'price',
             Cell: this.renderEditable
         }, {
