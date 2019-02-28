@@ -11,9 +11,13 @@ Clone the repository:
 Install dependencies:
 
 `npm install react-table --save`
+
 `npm install react-confirm-alert --save`
+
 `npm install react-skylight --save`
+
 `npm install react-csv --save`
+
 `npm install @material-ui/core --save`
 
 `npm install elastic-apm-js-base --save`
@@ -25,7 +29,9 @@ Start the application:
 To run the production build, follow these steps:
 
 `npm run build`
+
 `npm install -g serve`
+
 `serve -s build`
 
 ## Learn More
