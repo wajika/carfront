@@ -19,9 +19,8 @@ class Carlist extends Component {
 
     // Add new car
     addCar(car) {
+        // Create a custom transaction
         var transaction = apm.startTransaction("Add Car", "Car");
-        var httpSpan = transaction.startSpan('Add Car', 'Car')
-
         apm.addTags(car);
 
         fetch(SERVER_URL + 'api/cars',
@@ -34,11 +33,23 @@ class Carlist extends Component {
             })
             .then(res => this.fetchCars())
             .catch(err => console.error(err))
-            
-        httpSpan.end()
-        transaction.end();    
     }
-    
+
+    fetchCars = () => {
+        fetch(SERVER_URL + 'api/cars')
+            .then((response) => response.json())
+            .then((responseData) => {
+                this.setState({
+                    cars: responseData._embedded.cars,
+                });
+            })
+            .catch(err => console.error(err));
+
+            // End the current transaction at the end of the response call back
+            var transaction = apm.getCurrentTransaction()
+            transaction.end()
+    }
+       
     renderEditable = (cellInfo) => {
         return (
             <div
@@ -90,17 +101,6 @@ class Carlist extends Component {
 
     componentDidMount() {
         this.fetchCars();
-    }
-
-    fetchCars = () => {
-        fetch(SERVER_URL + 'api/cars')
-            .then((response) => response.json())
-            .then((responseData) => {
-                this.setState({
-                    cars: responseData._embedded.cars,
-                });
-            })
-            .catch(err => console.error(err));
     }
 
     generateError() {
