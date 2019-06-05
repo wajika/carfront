@@ -45,9 +45,6 @@ class Carlist extends Component {
             })
             .catch(err => console.error(err));
 
-            // End the current transaction at the end of the response call back
-            var transaction = apm.getCurrentTransaction();
-            if (transaction) transaction.end();
     }
        
     renderEditable = (cellInfo) => {
