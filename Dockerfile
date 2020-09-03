@@ -1,6 +1,6 @@
 
 ### STAGE 1: Build ###
-FROM node:14.9.0-buster
+FROM node:14.9.0-buster as builder
 
 ### Install dependencies ###
 RUN npm install react-table --save
