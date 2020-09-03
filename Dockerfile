@@ -8,7 +8,8 @@ RUN npm install react-confirm-alert --save
 RUN npm install react-skylight --save
 RUN npm install react-csv --save
 RUN npm install @material-ui/core --save
-RUN npm install elastic-apm-js-base --save
+#RUN npm install elastic-apm-js-base --save
+RUN npm install @elastic/apm-rum --save
 
 ###Start the application:
 #npm start
