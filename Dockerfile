@@ -16,6 +16,9 @@ WORKDIR /usr/src/app
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
 COPY . /usr/src/app
+RUN npm install --silent
+RUN npm install react-scripts -g --silent
+
 ###Start the application:
 #npm start
 
