@@ -23,15 +23,15 @@ RUN npm install react-scripts -g --silent
 #npm start
 
 ###To run the production build, follow these steps:
-#npm run build
+RUN npm run build
 #RUN npm install -g serve
 #serve -s build
-RUN npm run build
+#RUN npm run build
 
 
 
 ### STAGE 2: Production Environment ###
-FROM nginx:1.19.2-alpine
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+#FROM nginx:1.19.2-alpine
+#COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+#EXPOSE 80
+#CMD ["nginx", "-g", "daemon off;"]
